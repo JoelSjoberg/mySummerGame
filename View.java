@@ -4,36 +4,42 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
+import javax.swing.JFrame;
+
 public class View extends Canvas{
 	
+
+	private static final long serialVersionUID = 1L;
 	int width, height;
 	BufferStrategy bs;
+	JFrame frame = new JFrame();
 	public View(int width, int height)
 	{
 		this.width = width;
 		this.height = height;
+		frame.pack();
+		frame.add(this);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(new Dimension(width, height));
+		frame.setFocusable(true);
+		frame.setVisible(true);
+		addKeyListener(new KeyBoard());
 		setSize(new Dimension(width, height));
+		setFocusable(true);
 		setVisible(true);
 		setBackground(Color.black);
 	}
 	
 	Graphics2D g;
-	void render(boolean paused)
+	void render(GameCore game)
 	{
 		bs = this.getBufferStrategy();
 		g = (Graphics2D) bs.getDrawGraphics();
 		g.clearRect(0, 0, this.getWidth(), this.getHeight());
 		
-		// Here we can draw the game state
-		if(!paused) {
-			
-			g.setColor(Color.red);
-			g.fillRect(50, 50, width, height);
-		}
-		else{
-			// Draw pause screen
-		}
-		
+		// Here we can draw the game state			
+		game.draw(g);
 		
 		bs.show();
 		g.dispose();
