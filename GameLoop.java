@@ -1,3 +1,5 @@
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 
 public class GameLoop
@@ -12,11 +14,36 @@ public class GameLoop
 	
 	private boolean running = false;
 	ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
+	int height = 500; int width = height * 16/9;
 	public GameLoop()
 	{
-		game = new BattleSystem();
-		view = new View(500, 500);
+		game = new BattleSystem(width, height);
+		view = new View(width, height);
 		view.createBufferStrategy(3);
+		// if the frame is resized, change the height and width variables
+		view.frame.addComponentListener(new ComponentListener (){
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				// resize the gameobjects to the current resoulution 
+				width = view.frame.getWidth();
+				height = view.frame.getHeight();
+				game.resizeAll();
+				game.repositionAll();
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent arg0) {
+				// not in use
+			}		
+			@Override
+			public void componentMoved(ComponentEvent arg0) {
+				// not in use
+			}
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				// not in use
+			}
+		});
 		
 	}
 	
@@ -24,7 +51,7 @@ public class GameLoop
 	{
 		int ups = 0;int fps = 0;
 		int updatesPerSecond = 100;
-		int rendersPerSecond = 60;
+		int rendersPerSecond = 144;
 		int timeBetweenUpdates = 1000000000 / updatesPerSecond;
 		int timeBetweenRenders = 1000000000 / rendersPerSecond;
 
@@ -36,14 +63,15 @@ public class GameLoop
 			// run the game
 			
 			
-			// Update the game logic <updatesPreSecond> times
+			// Update the game logic <updatesPerSecond> times
 			if(System.nanoTime() >= timeBetweenUpdates + lastUpdate) {
 				lastUpdate = System.nanoTime();				
 				ups++;
 				game.loop();
+				game.setSize(width, height);
 			}
 			
-			// render the game <rendersPreSecond> times
+			// render the game <rendersPerSecond> times
 			if (System.nanoTime() >= timeBetweenRenders + lastRender) {
 				lastRender = System.nanoTime();
 				view.render(game);

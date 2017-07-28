@@ -37,7 +37,7 @@ public class Vector
 		this.x = Math.cos(degree) * tempx - Math.sin(degree) * tempy;
 		this.y = Math.sin(degree) * tempx + Math.cos(degree) * tempy;
 	}
-	double degree;
+	private double degree = 2;
 	double getDegree() {
 		degree = Math.toDegrees(Math.atan2(this.x, this.y));
 		if(degree < 0) {
