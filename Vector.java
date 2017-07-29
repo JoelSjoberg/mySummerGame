@@ -7,7 +7,6 @@ public class Vector
 		this.x = x;
 		this.y = y;
 	}
-	
 	void mult(double multiplyer) {
 		this.x *= multiplyer;
 		this.y *= multiplyer;
@@ -34,8 +33,8 @@ public class Vector
 	void rotate(int degree) {
 		tempx = this.x;
 		tempy = this.y;
-		this.x = Math.cos(degree) * tempx - Math.sin(degree) * tempy;
-		this.y = Math.sin(degree) * tempx + Math.cos(degree) * tempy;
+		this.x = Math.cos(Math.toRadians(degree)) * tempx - Math.sin(Math.toRadians(degree)) * tempy;
+		this.y = Math.sin(Math.toRadians(degree)) * tempx + Math.cos(Math.toRadians(degree)) * tempy;
 	}
 	private double degree = 2;
 	double getDegree() {
@@ -45,13 +44,11 @@ public class Vector
 		}
 		return degree;
 	}
-
 	public void limit(double limiter) {
 		
 		if(length() >= limiter){
 			this.normalize();
 			this.mult(limiter);			
 		}
-		
 	}
 }
