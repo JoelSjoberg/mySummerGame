@@ -11,6 +11,7 @@ public class BattleSystem implements GameCore{
 	AIgent enemy2;
 	ArrayList<AIgent> Enemies;
 	
+	State state = State.Start;
 	boolean paused = false;
 	int width, height;
 	int originHeight, originWidth;
@@ -25,8 +26,8 @@ public class BattleSystem implements GameCore{
 		this.originHeight = height;
 		
 		Enemies = new ArrayList<AIgent>();
-		Enemies.add(new AIgent(100, 100));
-		Enemies.add(new AIgent(115, 300));
+		Enemies.add(new AIgent(170, 220));
+		Enemies.add(new AIgent(135, 390));
 		player = new Player(width - 200, height - 200);
 		player.target = Enemies.get(0);
 	}
@@ -52,21 +53,27 @@ public class BattleSystem implements GameCore{
 			if (d) player.act(2);
 			if (s) player.act(3);
 			
+			// Lock on to a specific enemy
 			// iterate trough the enemies when the button has been pressed and don't change before it is pressed again!
-			
+
 			//iterate up
+			int targetIndex = Enemies.indexOf(player.target);
 			if ((up || left) && !goUp){
-				Player.target = Enemies.get((((Enemies.indexOf(Player.target) - 1) % Enemies.size()) + Enemies.size()) % Enemies.size());				
+				// Modulo from negative numbers give negative output, so do not use modulo here
+				if (--targetIndex < 0) targetIndex = Enemies.size() - 1;
+				player.target = Enemies.get(targetIndex);	
 				goUp = true;
-			}
-			if ((!up && !left) && goUp){
-				goUp = false;
 			}
 			
 			// iterate down
 			if ((down || right) && !goDown){
-				Player.target = Enemies.get((Enemies.indexOf(Player.target) + 1) % Enemies.size());				
+				player.target = Enemies.get((targetIndex + 1) % Enemies.size());				
 				goDown = true;
+			}
+
+			// Toggle the boolean(s) to stop the lock on box
+			if ((!up && !left) && goUp){
+				goUp = false;
 			}
 			if ((!down && !right) && goDown){
 				goDown = false;
@@ -127,12 +134,35 @@ public class BattleSystem implements GameCore{
 //-------------------------- Main loop --------------------------//
 	@Override
 	public void loop() {
-		takeInput();
-		if(!paused){
-			player.doAction();
-			for(int i = 0; i < Enemies.size(); i++){
-				Enemies.get(i).doAction();
-			}			
+		
+		switch(state){
+		
+		case Start:
+			
+			break;
+		
+		case Midbattle:
+			takeInput();
+			if(!paused){
+				player.doAction();
+				player.increaseEnergy();
+				for(int i = 0; i < Enemies.size(); i++){
+					Enemies.get(i).doAction();
+				}			
+			}
+			break;
+			
+		case PlayerDeath:
+			break;
+		case PlayerVictory:
+			break;
 		}
+	}
+	//-------------------------- State enums for transition --------------------------//
+	public enum State{
+		Start,
+		Midbattle,
+		PlayerDeath,
+		PlayerVictory;
 	}
 }

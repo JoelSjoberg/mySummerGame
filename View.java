@@ -8,7 +8,6 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 public class View extends Canvas{
-	
 
 	private static final long serialVersionUID = 1L;
 	int width, height;

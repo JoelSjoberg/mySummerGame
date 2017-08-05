@@ -43,8 +43,7 @@ public class GameLoop
 			public void componentShown(ComponentEvent arg0) {
 				// not in use
 			}
-		});
-		
+		});	
 	}
 	
 	private void run ()

@@ -12,20 +12,26 @@ public class Player implements GameObject{
 	double anchorX, anchorY;
 	
 	// Gameplay variables
-	int maxSpeed = 15;
+	int originalMaxSpeed = 8;
+	int maxSpeed = originalMaxSpeed;
 	int maxEnergy = 300;
+	int maxHp = 300;
 	int experience = 0;
+	int currentAction;
+	double energyChangeRate = 0.4;
 	long staggerStart, staggerTime = 1500000000;
 	Color color = new Color(22, 22, 22);
+	Sprite sprite = new Sprite("ph.png");
+	
 	
 	//static state variables to be used by ai, abilities and system
-	static int hp, maxHp;
-	static int energy = 150;
+	static int hp = 300;
 	static int strength, defence, accuracy;
-	static int currentAction;
+	static double energy = 150;
 	static boolean idle, staggered;
 	static AIgent target;
 	static Ability[] abilities;
+	
 	
 	public Player(int x, int y){
 		originX = x; originY = y;
@@ -52,17 +58,27 @@ public class Player implements GameObject{
 		g.setColor(this.color);
 		g.fillOval((int)location.x - width / 2, (int)location.y - height / 2, this.width, this.height);
 		if(target != null){
+			// draw an indicator on which enemy is targeted
 			g.drawRect((int)target.location.x - target.width/2 - 5, (int)target.location.y - target.height/2 - 5, target.width + 10, target.height + 10);			
 		}
+		// draw the energy gauge
+		g.setColor(color.cyan);
+		g.fillRect((int)location.x + width / 2, (int)location.y + height / 2, 10, (int)energy);
+		g.setColor(color.black);
+		g.drawRect((int)location.x + width / 2, (int)location.y + height / 2, 10, 100);
+		sprite.draw(g, (int)location.x - width / 2, (int)location.y - height / 2, this.width, this.height);
 	}
 
-// ------------------------------Main Behavior method------------------------------//
+// ------------------------------ Main Behavior method ------------------------------//
 	public void doAction()
 	{
 		// always move if told
 		this.velocity.limit(maxSpeed);
 		this.velocity.addVector(this.acceleration);
 		this.location.addVector(this.velocity);
+		System.out.println(maxSpeed);
+		this.maxSpeed = originalMaxSpeed;
+		// In case an ability changes maxSpeed, redefine it
 		
 		if (!staggered && idle)
 		{
@@ -95,10 +111,11 @@ public class Player implements GameObject{
 		}
 	}
 
-// ------------------------------ Private behavior methods------------------------------//
+// ------------------------------ Private behavior methods ------------------------------//
 	private void doIdleAnimation()
 	{
-		this.location.y += Math.sin(System.nanoTime() / 100000000);			
+		//this.location.y += Math.sin(System.nanoTime() / 100000000);
+		sprite.idleAnimation();
 	}
 	private void beStaggered()
 	{
@@ -110,11 +127,17 @@ public class Player implements GameObject{
 			staggered = false;
 		}
 	}
+	private void ceaseActivity() {
+		for(int i = 0; i < abilities.length; i++){
+			abilities[i].interrupt();
+		}
+	}
 	
-//------------------------------Callable behavior methods------------------------------//	
+//------------------------------ Callable behavior methods ------------------------------//	
 	public void act(int index)
 	{
 		if(!staggered && energy >= abilities[index].getCost() && !abilities[index].getExecuting()){
+			ceaseActivity();
 			idle = false;
 			energy -= abilities[index].getCost();
 			currentAction = index;
@@ -131,15 +154,22 @@ public class Player implements GameObject{
 	public boolean collide(AIgent target) {
 		return Math.sqrt(Math.pow(this.location.x - target.location.x, 2) + Math.pow(this.location.y - target.location.y, 2)) <= this.width;
 	}
+	public void increaseEnergy() {
+		if(energy < maxEnergy){
+			energy += energyChangeRate;
+		}
+	}
 	boolean goingBack = false;
-	public void goBack() {
+	public void goBack()
+	{
 		// Return player to the original position
 		goingBack = true;
 		acceleration = new Vector(anchorX - location.x, anchorY - location.y);
-		acceleration.normalize();				
+		acceleration.normalize();
+		sprite.backingOff();
 	}
-
-// Methods for resizing and repositioning relative to the screens size
+	
+// ------------------------Methods for resizing and repositioning relative to the screens size--------------------------//
 	public void resize(int currWidth, int currHeight, int originW, int originH){
 		// resize object with game resolution
 		this.width = (originWidth * currWidth) / originW;
