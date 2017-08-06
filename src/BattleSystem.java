@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import GameBase.KeyBoard;
 
 public class BattleSystem implements GameCore{
 
