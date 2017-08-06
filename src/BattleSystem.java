@@ -1,7 +1,12 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+
+import GameBase.KeyBoard;
 
 public class BattleSystem implements GameCore{
 
@@ -17,6 +22,10 @@ public class BattleSystem implements GameCore{
 	int originHeight, originWidth;
 	long pauseStart;
 	long pauseFinish;
+	
+	static long startTime;
+	
+	
 	public BattleSystem(int width, int height) {
 		
 		// for resize method
@@ -30,6 +39,8 @@ public class BattleSystem implements GameCore{
 		Enemies.add(new AIgent(135, 390));
 		player = new Player(width - 200, height - 200);
 		player.target = Enemies.get(0);
+		
+		startTime = System.currentTimeMillis();
 	}
 	
 //-------------------------- Input and pause--------------------------//
@@ -117,19 +128,36 @@ public class BattleSystem implements GameCore{
 	
 
 //-------------------------- Draw every object and the game world --------------------------//
+	Image background = new ImageIcon("src/res/bg.png").getImage();
 	@Override
 	public void draw(Graphics2D g) {
+		g.drawImage(background, 0, 0, width, height, 0, 0, background.getWidth(null), background.getHeight(null), null);
 		g.setBackground(Color.BLACK);
-		g.setFont(new Font("helvetica", Font.BOLD, 38));
+		g.setFont(new Font("helvetica", Font.BOLD, 38));			
 		if(paused){
-			
 			g.setColor(Color.orange);
-			g.drawString("Pause", width - 150, 40);	
+			g.drawString("Pause", width - 150, 40);
+			
 		}
 		for(int i = 0; i < Enemies.size(); i++){
 			Enemies.get(i).Draw(g);
 		}
+		
 		player.Draw(g);
+		switch(state){
+		case Start:
+			
+			g.setColor(Color.black);
+			g.fillRect(0, 0, width, height);
+			g.setColor(Color.white);
+			if(startTime + 3000 < System.currentTimeMillis()) state = State.Midbattle;
+			break;
+		
+		case PlayerDeath:
+			
+			break;
+		}
+			
 	}
 //-------------------------- Main loop --------------------------//
 	@Override
@@ -148,7 +176,8 @@ public class BattleSystem implements GameCore{
 				player.increaseEnergy();
 				for(int i = 0; i < Enemies.size(); i++){
 					Enemies.get(i).doAction();
-				}			
+				}
+				if (player.hp <= 0) state = State.PlayerDeath; 
 			}
 			break;
 			
