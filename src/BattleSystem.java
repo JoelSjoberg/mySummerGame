@@ -6,13 +6,10 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-
 public class BattleSystem implements GameCore{
 
 	
 	Player player;
-	AIgent enemy1;
-	AIgent enemy2;
 	ArrayList<AIgent> Enemies;
 	
 	State state = State.Start;
@@ -23,7 +20,6 @@ public class BattleSystem implements GameCore{
 	long pauseFinish;
 	
 	static long startTime;
-	
 	
 	public BattleSystem(int width, int height) {
 		
@@ -128,9 +124,10 @@ public class BattleSystem implements GameCore{
 
 //-------------------------- Draw every object and the game world --------------------------//
 	Image background = new ImageIcon("src/res/bg.png").getImage();
+	SpriteScreen animatedBackground = new SpriteScreen("StartAnimation.png");
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(background, 0, 0, width, height, 0, 0, background.getWidth(null), background.getHeight(null), null);
+		//g.drawImage(background, 0, 0, width, height, 0, 0, background.getWidth(null), background.getHeight(null), null);
 		g.setBackground(Color.BLACK);
 		g.setFont(new Font("helvetica", Font.BOLD, 38));			
 		if(paused){
@@ -143,17 +140,19 @@ public class BattleSystem implements GameCore{
 		}
 		
 		player.Draw(g);
+		
 		switch(state){
 		case Start:
-			
-			g.setColor(Color.black);
-			g.fillRect(0, 0, width, height);
-			g.setColor(Color.white);
-			if(startTime + 3000 < System.currentTimeMillis()) state = State.Midbattle;
+			animatedBackground.draw(g, 0, 0, width, height);
+			animatedBackground.idleAnimation();
+			if(startTime + 1600 < System.currentTimeMillis()) state = State.Midbattle;
 			break;
 		
+		case PlayerVictory:
+			break;
 		case PlayerDeath:
-			
+			break;
+		default:
 			break;
 		}
 			
@@ -186,7 +185,7 @@ public class BattleSystem implements GameCore{
 			break;
 		}
 	}
-	//-------------------------- State enums for transition --------------------------//
+//-------------------------- State enums for transition --------------------------//
 	public enum State{
 		Start,
 		Midbattle,

@@ -12,11 +12,11 @@ public class Sprite implements SpriteSheet{
 	public Sprite (String fileName)
 	{
 		img = new ImageIcon("src/res/" + fileName).getImage();
-		tileWidth = 103; tileHeight = 89;
+		tileWidth = img.getWidth(null) / 4; tileHeight = img.getHeight(null) / 4;
 		frameX1 = 0; frameY1 = 0;
 		frameX2 = tileWidth; frameY2 = tileHeight;
 		startTime = System.nanoTime();
-		runTime = 40000000;
+		runTime = 100000000;
 	}
 	
 	public void idleAnimation()
@@ -24,9 +24,10 @@ public class Sprite implements SpriteSheet{
 		if(startTime + runTime < System.nanoTime() - runTime) {
 			startTime = System.nanoTime();
 			frameX1 += tileWidth;
-			frameX2 += tileHeight;
-			if(frameX2 > 309) {frameX1 = 0; frameX2 = tileWidth;frameY1 += tileHeight; frameY2 += tileHeight;}
-			if(frameY2 > 178) {frameY1 = 0; frameY2 = tileHeight;}
+			frameX2 += tileWidth;
+			//if(frameX2 > img.getWidth(null)) {frameX1 = 0; frameX2 = tileWidth;frameY1 += tileHeight; frameY2 += tileHeight;}
+			//if(frameY2 > img.getHeight(null)) {frameY1 = 0; frameY2 = tileHeight;}
+			if(frameX2 > img.getWidth(null)) {frameX1 = 0; frameX2 = tileWidth;}
 		}
 	}
 
@@ -50,8 +51,8 @@ public class Sprite implements SpriteSheet{
 	public void bounce() {
 		frameX1 = tileWidth * 0;
 		frameX2 = tileWidth * 1;
-		frameY1 = tileHeight * 1;
-		frameY2 = tileHeight * 2;	
+		frameY1 = tileHeight * 0;
+		frameY2 = tileHeight * 1;	
 		
 	}
 
@@ -59,8 +60,8 @@ public class Sprite implements SpriteSheet{
 	public void backingOff() {
 		frameX1 = tileWidth * 2;
 		frameX2 = tileWidth * 3;
-		frameY1 = tileHeight * 1;
-		frameY2 = tileHeight * 2;	
+		frameY1 = tileHeight * 0;
+		frameY2 = tileHeight * 1;	
 	}
 	
 	public void draw(Graphics2D g, int x, int y, int width, int height)

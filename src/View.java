@@ -1,5 +1,4 @@
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -41,7 +40,7 @@ public class View extends Canvas{
 	    g.setRenderingHints(rh);
 		g.clearRect(0, 0, this.getWidth(), this.getHeight());
 		
-		// Here we can draw the game state			
+		// Draw the game here		
 		game.draw(g);
 
 		bs.show();

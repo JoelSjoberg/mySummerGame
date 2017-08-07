@@ -21,15 +21,17 @@ public class Player implements GameObject{
 	double energyChangeRate = 0.4;
 	long staggerStart, staggerTime = 1500000000;
 	Color color = new Color(22, 22, 22);
-	Sprite sprite = new Sprite("ph.png");
+	Sprite sprite = new Sprite("Spirit.png");
 	
 	
 	//static state variables to be used by ai, abilities and system
-	static int hp = 300;
+	int hp = 300;
 	static int strength, defence, accuracy;
 	static double energy = 150;
-	static boolean idle, staggered;
-	static AIgent target;
+	static boolean idle;
+
+	boolean staggered;
+	AIgent target;
 	static Ability[] abilities;
 	
 	
@@ -56,15 +58,15 @@ public class Player implements GameObject{
 	public void Draw(Graphics2D g)
 	{	
 		g.setColor(this.color);
-		g.fillOval((int)location.x - width / 2, (int)location.y - height / 2, this.width, this.height);
+		//g.fillOval((int)location.x - width / 2, (int)location.y - height / 2, this.width, this.height);
 		if(target != null){
 			// draw an indicator on which enemy is targeted
 			g.drawRect((int)target.location.x - target.width/2 - 5, (int)target.location.y - target.height/2 - 5, target.width + 10, target.height + 10);			
 		}
 		// draw the energy gauge
-		g.setColor(color.cyan);
+		g.setColor(Color.cyan);
 		g.fillRect((int)location.x + width / 2, (int)location.y + height / 2, 10, (int)energy);
-		g.setColor(color.black);
+		g.setColor(Color.black);
 		g.drawRect((int)location.x + width / 2, (int)location.y + height / 2, 10, 100);
 		sprite.draw(g, (int)location.x - width / 2, (int)location.y - height / 2, this.width, this.height);
 	}
@@ -76,7 +78,6 @@ public class Player implements GameObject{
 		this.velocity.limit(maxSpeed);
 		this.velocity.addVector(this.acceleration);
 		this.location.addVector(this.velocity);
-		System.out.println(maxSpeed);
 		this.maxSpeed = originalMaxSpeed;
 		// In case an ability changes maxSpeed, redefine it
 		
