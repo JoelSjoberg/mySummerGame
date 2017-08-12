@@ -11,7 +11,6 @@ public class GameLoop
 	
 	private View view;
 	private BattleSystem game;
-	
 	private boolean running = false;
 	ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
 	int height = 500; int width = height * 16/9;
@@ -27,6 +26,7 @@ public class GameLoop
 				// resize the gameobjects to the current resoulution 
 				width = view.frame.getWidth();
 				height = view.frame.getHeight();
+				game.setSize(width, height);
 				game.resizeAll();
 				game.repositionAll();
 			}
@@ -48,27 +48,27 @@ public class GameLoop
 	
 	private void run ()
 	{
-		int ups = 0;int fps = 0;
-		int updatesPerSecond = 100;
+		long lastRender = System.nanoTime();
+		long lastUpdate = System.nanoTime();
+		int ups = 0; int fps = 0;
+		int updatesPerSecond = 144;
 		int rendersPerSecond = 144;
 		int timeBetweenUpdates = 1000000000 / updatesPerSecond;
 		int timeBetweenRenders = 1000000000 / rendersPerSecond;
 
 		long time = System.nanoTime();
-		long lastUpdate = System.nanoTime();
-		long lastRender = System.nanoTime();
+		view.initView();
 		while(running)
 		{
 			// run the game
-			
 			
 			// Update the game logic <updatesPerSecond> times
 			if(System.nanoTime() >= timeBetweenUpdates + lastUpdate) {
 				lastUpdate = System.nanoTime();				
 				ups++;
 				game.loop();
-				game.setSize(width, height);
 			}
+			
 			
 			// render the game <rendersPerSecond> times
 			if (System.nanoTime() >= timeBetweenRenders + lastRender) {
@@ -92,4 +92,5 @@ public class GameLoop
 		running = true;
 		run();
 	}
+	
 }

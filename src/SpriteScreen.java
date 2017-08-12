@@ -22,7 +22,6 @@ public class SpriteScreen{
 	public void idleAnimation()
 	{
 		if(startTime + runTime < System.nanoTime() - runTime) {
-			System.out.println(frameX2);
 			startTime = System.nanoTime();
 			frameX1 += tileWidth;
 			frameX2 += tileWidth;

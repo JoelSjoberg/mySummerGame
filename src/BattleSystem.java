@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ public class BattleSystem implements GameCore{
 
 	
 	Player player;
-	ArrayList<AIgent> Enemies;
+	ArrayList<GameObject> Enemies;
 	
 	State state = State.Start;
 	boolean paused = false;
@@ -18,7 +17,6 @@ public class BattleSystem implements GameCore{
 	int originHeight, originWidth;
 	long pauseStart;
 	long pauseFinish;
-	
 	static long startTime;
 	
 	public BattleSystem(int width, int height) {
@@ -29,7 +27,7 @@ public class BattleSystem implements GameCore{
 		this.originWidth = width;
 		this.originHeight = height;
 		
-		Enemies = new ArrayList<AIgent>();
+		Enemies = new ArrayList<GameObject>();
 		Enemies.add(new AIgent(170, 220));
 		Enemies.add(new AIgent(135, 390));
 		player = new Player(width - 200, height - 200);
@@ -123,29 +121,30 @@ public class BattleSystem implements GameCore{
 	
 
 //-------------------------- Draw every object and the game world --------------------------//
-	Image background = new ImageIcon("src/res/bg.png").getImage();
 	SpriteScreen animatedBackground = new SpriteScreen("StartAnimation.png");
 	@Override
 	public void draw(Graphics2D g) {
-		//g.drawImage(background, 0, 0, width, height, 0, 0, background.getWidth(null), background.getHeight(null), null);
-		g.setBackground(Color.BLACK);
-		g.setFont(new Font("helvetica", Font.BOLD, 38));			
 		if(paused){
 			g.setColor(Color.orange);
 			g.drawString("Pause", width - 150, 40);
 			
 		}
+		// Draw the objects
+		player.Draw(g);
 		for(int i = 0; i < Enemies.size(); i++){
 			Enemies.get(i).Draw(g);
 		}
 		
-		player.Draw(g);
-		
+		//draw states
 		switch(state){
 		case Start:
-			animatedBackground.draw(g, 0, 0, width, height);
-			animatedBackground.idleAnimation();
+			//animatedBackground.draw(g, 0, 0, width, height);
+			//animatedBackground.idleAnimation();
 			if(startTime + 1600 < System.currentTimeMillis()) state = State.Midbattle;
+			player.startAnimation();
+			for(int i = 0; i < Enemies.size(); i++){
+				Enemies.get(i).startAnimation();
+			}
 			break;
 		
 		case PlayerVictory:

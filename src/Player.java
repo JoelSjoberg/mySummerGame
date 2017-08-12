@@ -20,18 +20,13 @@ public class Player implements GameObject{
 	int currentAction;
 	double energyChangeRate = 0.4;
 	long staggerStart, staggerTime = 1500000000;
-	Color color = new Color(22, 22, 22);
-	Sprite sprite = new Sprite("Spirit.png");
-	
-	
-	//static state variables to be used by ai, abilities and system
 	int hp = 300;
 	static int strength, defence, accuracy;
 	static double energy = 150;
 	static boolean idle;
 
 	boolean staggered;
-	AIgent target;
+	GameObject target;
 	static Ability[] abilities;
 	
 	
@@ -55,20 +50,37 @@ public class Player implements GameObject{
 	}
 
 	// ------------------------------Main Draw method------------------------------//
+	int energyBarLen = 100;
+	int energyLen = 0;
+	int hpBarLen = 100;
+	int hpLen = 0;
+	Color color = new Color(22, 22, 22);
+	EnemySprite sprite = new EnemySprite("Spirit2.png");
 	public void Draw(Graphics2D g)
 	{	
-		g.setColor(this.color);
-		//g.fillOval((int)location.x - width / 2, (int)location.y - height / 2, this.width, this.height);
+		//Draw the player
+		sprite.draw(g, (int)location.x - width / 2, (int)location.y - height / 2, this.width, this.height);
+		
 		if(target != null){
 			// draw an indicator on which enemy is targeted
-			g.drawRect((int)target.location.x - target.width/2 - 5, (int)target.location.y - target.height/2 - 5, target.width + 10, target.height + 10);			
+			g.setColor(Color.black);
+			g.drawRect((int)target.getX() - target.getWidth()/2 - 5, (int)target.getY() - target.getHeight()/2 - 5, target.getWidth() + 10, target.getHeight() + 10);			
 		}
-		// draw the energy gauge
+		//g.drawString("" + (int)energy,10, 10);
+		// Draw energy and hp bars at a designated length
+		
+		energyLen = (int) (energy * energyBarLen/maxEnergy);
 		g.setColor(Color.cyan);
-		g.fillRect((int)location.x + width / 2, (int)location.y + height / 2, 10, (int)energy);
+		g.fillRect((int)location.x + width / 2, 0, 10, energyLen);
 		g.setColor(Color.black);
-		g.drawRect((int)location.x + width / 2, (int)location.y + height / 2, 10, 100);
-		sprite.draw(g, (int)location.x - width / 2, (int)location.y - height / 2, this.width, this.height);
+		g.drawRect((int)location.x + width / 2, 0, 10, energyBarLen);
+		
+		hpLen = hp * hpBarLen / maxHp;
+		g.setColor(Color.green);
+		g.fillRect((int)location.x + width / 2, (int)location.y + height / 2, hpLen, 10);
+		g.setColor(Color.black);
+		g.drawRect((int)location.x + width / 2, (int)location.y + height / 2, hpBarLen, 10);
+		
 	}
 
 // ------------------------------ Main Behavior method ------------------------------//
@@ -135,6 +147,11 @@ public class Player implements GameObject{
 	}
 	
 //------------------------------ Callable behavior methods ------------------------------//	
+	@Override
+	public void startAnimation() {
+		this.sprite.startAnimation();
+	}
+	
 	public void act(int index)
 	{
 		if(!staggered && energy >= abilities[index].getCost() && !abilities[index].getExecuting()){
@@ -146,14 +163,14 @@ public class Player implements GameObject{
 			acceleration.mult(0);
 			velocity.mult(0);
 		}
-	}	
+	}
 	public void stagger()
 	{
 		staggerStart = System.nanoTime();
 		this.staggered = true;
 	}	
-	public boolean collide(AIgent target) {
-		return Math.sqrt(Math.pow(this.location.x - target.location.x, 2) + Math.pow(this.location.y - target.location.y, 2)) <= this.width;
+	public boolean collide(GameObject target) {
+		return Math.sqrt(Math.pow(this.location.x - target.getX(), 2) + Math.pow(this.location.y - target.getY(), 2)) <= this.width;
 	}
 	public void increaseEnergy() {
 		if(energy < maxEnergy){
@@ -183,5 +200,25 @@ public class Player implements GameObject{
 		this.location.y = originY * currHeight / originH;
 		anchorX = this.location.x;
 		anchorY = this.location.y;
+	}
+
+	@Override
+	public double getX() {
+		return this.location.x;
+	}
+
+	@Override
+	public double getY() {
+		return this.location.x;
+	}
+
+	@Override
+	public int getWidth() {
+		return this.width;
+	}
+
+	@Override
+	public int getHeight() {
+		return this.height;
 	}
 }

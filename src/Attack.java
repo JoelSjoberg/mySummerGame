@@ -19,7 +19,7 @@ public class Attack implements Ability{
 	{	
 			switch(eventNumber){
 			case(0): // Move to target at the start of execution
-				player.acceleration = new Vector(player.target.location.x - player.location.x, player.target.location.y - player.location.y);
+				player.acceleration = new Vector(player.target.getX() - player.location.x, player.target.getY() - player.location.y);
 				player.acceleration.normalize();
 				//Check that acceleration and velocity have the same degree to prevent infinity loop where player continuously rotate around target 
 				if(Math.abs(player.acceleration.getDegree() - player.velocity.getDegree()) > player.width/2) player.velocity.div(1.5);
