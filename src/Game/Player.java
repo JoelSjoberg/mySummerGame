@@ -10,6 +10,7 @@ import Abilities.Spark;
 import Enemies.AIgent;
 import GameUtility.Vector;
 import Sprites.EnemySprite;
+import Sprites.PlayerSprite;
 
 public class Player implements GameObject{
 
@@ -65,7 +66,7 @@ public class Player implements GameObject{
 	int hpBarLen = 100;
 	int hpLen = 0;
 	Color color = new Color(22, 22, 22);
-	public EnemySprite sprite = new EnemySprite("Spirit2.png");
+	public PlayerSprite sprite = new PlayerSprite("PlayerSprite.png");
 	public void Draw(Graphics2D g)
 	{	
 		//Draw the player

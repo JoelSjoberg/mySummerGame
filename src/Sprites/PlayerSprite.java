@@ -3,32 +3,46 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
-public class Sprite implements SpriteSheet{
+public class PlayerSprite implements SpriteSheet{
 	
 	Image img;
 	int frameX1, frameY1;
 	int frameX2, frameY2;
 	int tileWidth, tileHeight;
 	long startTime, runTime;
-	public Sprite (String fileName)
+	public PlayerSprite (String fileName)
 	{
+		int columns = 6; int rows = 6;
 		img = new ImageIcon("src/res/" + fileName).getImage();
-		tileWidth = img.getWidth(null) / 4; tileHeight = img.getHeight(null) / 4;
+		tileWidth = img.getWidth(null) / columns; tileHeight = img.getHeight(null) / rows;
 		frameX1 = 0; frameY1 = 0;
 		frameX2 = tileWidth; frameY2 = tileHeight;
 		startTime = System.nanoTime();
 		runTime = 100000000;
 	}
-	
-	public void idleAnimation()
-	{
+
+	@Override
+	public void startAnimation() {
+		runTime = 40000000;
 		if(startTime + runTime < System.nanoTime() - runTime) {
 			startTime = System.nanoTime();
 			frameX1 += tileWidth;
 			frameX2 += tileWidth;
-			//if(frameX2 > img.getWidth(null)) {frameX1 = 0; frameX2 = tileWidth;frameY1 += tileHeight; frameY2 += tileHeight;}
-			//if(frameY2 > img.getHeight(null)) {frameY1 = 0; frameY2 = tileHeight;}
+			frameY1 = 0;
+			frameY2 = tileHeight;
 			if(frameX2 > img.getWidth(null)) {frameX1 = 0; frameX2 = tileWidth;}
+		}
+	}
+	
+	@Override
+	public void idleAnimation()
+	{
+		frameX1 = 0;
+		frameX2 = tileWidth;
+		if(startTime + runTime < System.nanoTime() - runTime) {
+			startTime = System.nanoTime();
+			frameY1 = tileHeight;
+			frameY2 = tileHeight * 2;
 		}
 	}
 
@@ -68,11 +82,5 @@ public class Sprite implements SpriteSheet{
 	public void draw(Graphics2D g, int x, int y, int width, int height)
 	{
 		g.drawImage(img, x - 20, y - 20, x + width + 20, y + height + 20, frameX1, frameY1, frameX2, frameY2,  null);
-	}
-
-	@Override
-	public void startAnimation() {
-		// TODO Auto-generated method stub
-		
 	}
 }

@@ -141,7 +141,7 @@ public class BattleSystem implements GameCore{
 		//draw states
 		switch(state){
 		case Start:
-			animatedBackground.draw(g, 0, 0, width, height);
+			//animatedBackground.draw(g, 0, 0, width, height);
 			animatedBackground.idleAnimation();
 			if(startTime + 1600 < System.currentTimeMillis()) state = State.Midbattle;
 			player.startAnimation();
