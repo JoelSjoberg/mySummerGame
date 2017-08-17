@@ -23,7 +23,7 @@ public class PlayerSprite implements SpriteSheet{
 
 	@Override
 	public void startAnimation() {
-		runTime = 40000000;
+		runTime = 90000000;
 		if(startTime + runTime < System.nanoTime() - runTime) {
 			startTime = System.nanoTime();
 			frameX1 += tileWidth;
@@ -37,13 +37,15 @@ public class PlayerSprite implements SpriteSheet{
 	@Override
 	public void idleAnimation()
 	{
-		frameX1 = 0;
-		frameX2 = tileWidth;
 		if(startTime + runTime < System.nanoTime() - runTime) {
 			startTime = System.nanoTime();
 			frameY1 = tileHeight;
 			frameY2 = tileHeight * 2;
+			frameX1 += tileWidth;
+			frameX2 += tileWidth;
+			if(frameX2 > tileWidth * 2) {frameX1 = 0; frameX2 = tileWidth;}
 		}
+		runTime = 200000000;
 	}
 
 	@Override

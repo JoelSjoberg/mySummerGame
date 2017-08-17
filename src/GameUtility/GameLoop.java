@@ -28,8 +28,8 @@ public class GameLoop
 			@Override
 			public void componentResized(ComponentEvent arg0) {
 				// resize the gameobjects to the current resoulution 
-				width = view.frame.getWidth();
-				height = view.frame.getHeight();
+				width = view.getWidth();
+				height = view.getHeight();
 				game.setSize(width, height);
 				game.resizeAll();
 				game.repositionAll();

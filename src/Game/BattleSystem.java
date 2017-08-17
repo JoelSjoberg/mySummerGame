@@ -124,6 +124,10 @@ public class BattleSystem implements GameCore{
 	
 
 //-------------------------- Draw every object and the game world --------------------------//
+	int energyBarLen = 100;
+	int energyLen = 0;
+	int hpBarLen = 100;
+	int hpLen = 0;
 	SpriteScreen animatedBackground = new SpriteScreen("StartAnimation.png");
 	@Override
 	public void draw(Graphics2D g) {
@@ -137,6 +141,19 @@ public class BattleSystem implements GameCore{
 		for(int i = 0; i < Enemies.size(); i++){
 			Enemies.get(i).Draw(g);
 		}
+		
+		// Draw player hp and energy
+		energyLen = (int) (player.energy * energyBarLen/player.maxEnergy);
+		g.setColor(Color.cyan);
+		g.fillRect(width - 10,  height - energyBarLen, 10, energyLen);
+		g.setColor(Color.black);
+		g.drawRect(width - 10, height - energyBarLen, 10, energyBarLen);
+		
+		hpLen = player.hp * hpBarLen / player.maxHp;
+		g.setColor(Color.green);
+		g.fillRect(width - hpBarLen, height - 10, hpLen, 10);
+		g.setColor(Color.black);
+		g.drawRect(width - hpBarLen, height - 10, hpBarLen, 10);
 		
 		//draw states
 		switch(state){

@@ -33,7 +33,7 @@ public class Player implements GameObject{
 	long staggerStart, staggerTime = 1500000000;
 	int hp = 300;
 	static int strength, defence, accuracy;
-	static double energy = 150;
+	double energy = 150;
 	static boolean idle;
 
 	boolean staggered;
@@ -61,10 +61,6 @@ public class Player implements GameObject{
 	}
 
 	// ------------------------------Main Draw method------------------------------//
-	int energyBarLen = 100;
-	int energyLen = 0;
-	int hpBarLen = 100;
-	int hpLen = 0;
 	Color color = new Color(22, 22, 22);
 	public PlayerSprite sprite = new PlayerSprite("PlayerSprite.png");
 	public void Draw(Graphics2D g)
@@ -77,21 +73,6 @@ public class Player implements GameObject{
 			g.setColor(Color.black);
 			g.drawRect((int)target.getX() - target.getWidth()/2 - 5, (int)target.getY() - target.getHeight()/2 - 5, target.getWidth() + 10, target.getHeight() + 10);			
 		}
-		//g.drawString("" + (int)energy,10, 10);
-		// Draw energy and hp bars at a designated length
-		
-		energyLen = (int) (energy * energyBarLen/maxEnergy);
-		g.setColor(Color.cyan);
-		g.fillRect((int)location.getX() + width / 2, 0, 10, energyLen);
-		g.setColor(Color.black);
-		g.drawRect((int)location.getX() + width / 2, 0, 10, energyBarLen);
-		
-		hpLen = hp * hpBarLen / maxHp;
-		g.setColor(Color.green);
-		g.fillRect((int)location.getX() + width / 2, (int)location.getY() + height / 2, hpLen, 10);
-		g.setColor(Color.black);
-		g.drawRect((int)location.getX() + width / 2, (int)location.getY() + height / 2, hpBarLen, 10);
-		
 	}
 
 // ------------------------------ Main Behavior method ------------------------------//
@@ -119,7 +100,8 @@ public class Player implements GameObject{
 			else
 			{
 				// if the player is idle with no input, animate it
-				doIdleAnimation();				
+				doIdleAnimation();
+				//startAnimation();
 			}
 		}
 		else if (!staggered)

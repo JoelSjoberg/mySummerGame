@@ -13,23 +13,25 @@ public class View extends Canvas{
 	private static final long serialVersionUID = 1L;
 	int width, height;
 	BufferStrategy bs;
-	JFrame frame = new JFrame();
+	JFrame frame;
 	Graphics2D g;
 	public View(int width, int height)
 	{
-		this.width = width;
-		this.height = height;
-		frame.pack();
-		frame.add(this);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(new Dimension(width, height));
-		frame.setFocusable(true);
-		frame.setVisible(true);
 		addKeyListener(new KeyBoard());
-		setSize(new Dimension(width, height));
 		setFocusable(true);
+		setSize(new Dimension(width, height));
 		setVisible(true);
-		frame.setLocationRelativeTo(null);	
+		this.height = height;
+		this.width = width;
+		
+		frame = new JFrame();
+		frame.add(this);
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		
+		
 	}
 	
 	void initView(){
@@ -49,7 +51,8 @@ public class View extends Canvas{
 
 		// Draw the game here		
 		game.draw(g);
-
+		frame.repaint();
+		
 		bs.show();
 		g.dispose();
 	}
