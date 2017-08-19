@@ -51,7 +51,6 @@ public class View extends Canvas{
 
 		// Draw the game here		
 		game.draw(g);
-		frame.repaint();
 		
 		bs.show();
 		g.dispose();
