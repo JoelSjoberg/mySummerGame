@@ -2,8 +2,7 @@ package Game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-
-import Enemies.AIgent;
+import Enemies.Spirit;
 import GameUtility.GameCore;
 import GameUtility.KeyBoard;
 import Sprites.SpriteScreen;
@@ -31,8 +30,8 @@ public class BattleSystem implements GameCore{
 		this.originHeight = height;
 		
 		Enemies = new ArrayList<GameObject>();
-		Enemies.add(new AIgent(170, 220));
-		Enemies.add(new AIgent(135, 390));
+		Enemies.add(new Spirit(170, 220));
+		Enemies.add(new Spirit(135, 390));
 		player = new Player(width - 200, height - 200);
 		player.target = Enemies.get(0);
 		
@@ -142,18 +141,41 @@ public class BattleSystem implements GameCore{
 			Enemies.get(i).Draw(g);
 		}
 		
+		hpBarLen = 100;
+		energyBarLen = 100;
+		
 		// Draw player hp and energy
 		energyLen = (int) (player.energy * energyBarLen/player.maxEnergy);
 		g.setColor(Color.cyan);
-		g.fillRect(width - 10,  height - energyBarLen, 10, energyLen);
+		g.fillRect(width - energyBarLen - 20,  height - 20, energyLen, 7);
 		g.setColor(Color.black);
-		g.drawRect(width - 10, height - energyBarLen, 10, energyBarLen);
+		g.drawRect(width - energyBarLen - 20, height - 20, energyBarLen, 7);
 		
 		hpLen = player.hp * hpBarLen / player.maxHp;
 		g.setColor(Color.green);
-		g.fillRect(width - hpBarLen, height - 10, hpLen, 10);
+		g.fillRect(width - hpBarLen - 30, height - 30, hpLen, 10);
 		g.setColor(Color.black);
-		g.drawRect(width - hpBarLen, height - 10, hpBarLen, 10);
+		g.drawRect(width - hpBarLen - 30, height - 30, hpBarLen, 10);
+		
+		
+		hpBarLen = 75;
+		energyBarLen = 75;
+		
+		
+		// Draw target hp, energy and name
+		g.drawString(player.target.getName(), 10, 15);
+		energyLen = (int) (player.target.getEnergy() * energyBarLen/player.target.getMaxEnergy());
+		g.setColor(Color.cyan);
+		g.fillRect(20, 27, energyLen, 5);
+		g.setColor(Color.black);
+		g.drawRect(20, 27, energyBarLen, 5);
+		
+		hpLen = player.target.getHp() * hpBarLen / player.target.getMaxHp();
+		g.setColor(Color.red);
+		g.fillRect(10, 20, hpLen, 5);
+		g.setColor(Color.black);
+		g.drawRect(10, 20, hpBarLen, 5);
+		
 		
 		//draw states
 		switch(state){

@@ -23,7 +23,6 @@ public class PlayerSprite implements SpriteSheet{
 
 	@Override
 	public void startAnimation() {
-		runTime = 90000000;
 		if(startTime + runTime < System.nanoTime() - runTime) {
 			startTime = System.nanoTime();
 			frameX1 += tileWidth;
@@ -31,6 +30,7 @@ public class PlayerSprite implements SpriteSheet{
 			frameY1 = 0;
 			frameY2 = tileHeight;
 			if(frameX2 > img.getWidth(null)) {frameX1 = 0; frameX2 = tileWidth;}
+			runTime = 90000000;
 		}
 	}
 	
@@ -44,8 +44,8 @@ public class PlayerSprite implements SpriteSheet{
 			frameX1 += tileWidth;
 			frameX2 += tileWidth;
 			if(frameX2 > tileWidth * 2) {frameX1 = 0; frameX2 = tileWidth;}
+			runTime = 200000000;
 		}
-		runTime = 200000000;
 	}
 
 	@Override
@@ -80,9 +80,17 @@ public class PlayerSprite implements SpriteSheet{
 		frameY1 = tileHeight * 0;
 		frameY2 = tileHeight * 1;	
 	}
+	@Override
+	public void stagger() {
+		frameX1 = tileWidth * 2;
+		frameX2 = tileWidth * 3;
+		frameY1 = tileHeight * 0;
+		frameY2 = tileHeight * 1;		
+	}
 	
 	public void draw(Graphics2D g, int x, int y, int width, int height)
 	{
 		g.drawImage(img, x - 20, y - 20, x + width + 20, y + height + 20, frameX1, frameY1, frameX2, frameY2,  null);
 	}
+
 }

@@ -5,10 +5,28 @@ public interface GameObject {
 	void Draw(Graphics2D g);
 	void doAction();
 	void startAnimation();
-	void resize(int width, int height, int originWidth, int originHeight);
-	void reposition(int width, int height, int originWidth, int originHeight);
+	void stagger();
+	void beStaggered();
+	void sufferDamage(int damage);
+	boolean collide(GameObject target);
+	
+	int getHp();
+	int getMaxHp();
+	
+	double getEnergy();
+	int getMaxEnergy();
+	
+	int getStrength();
+	int getDefence();
+	int getAgility();
+	
+	
+	String getName();
 	double getX();
 	double getY();
 	int getWidth();
 	int getHeight();
+
+	void resize(int width, int height, int originWidth, int originHeight);
+	void reposition(int width, int height, int originWidth, int originHeight);
 }

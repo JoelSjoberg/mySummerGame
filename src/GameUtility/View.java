@@ -29,9 +29,7 @@ public class View extends Canvas{
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		
-		
+		frame.setVisible(true);	
 	}
 	
 	void initView(){

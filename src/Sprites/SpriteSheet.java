@@ -9,4 +9,5 @@ public interface SpriteSheet {
 	void slashAnimation();
 	void bounce();
 	void backingOff();
+	void stagger();
 }
