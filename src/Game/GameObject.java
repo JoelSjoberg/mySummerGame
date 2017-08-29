@@ -26,7 +26,4 @@ public interface GameObject {
 	double getY();
 	int getWidth();
 	int getHeight();
-
-	void resize(int width, int height, int originWidth, int originHeight);
-	void reposition(int width, int height, int originWidth, int originHeight);
 }

@@ -10,8 +10,6 @@ public class Spirit implements GameObject{
 	String name = "Spirit";
 	
 	// for resizing and position controll
-	final int originWidth, originHeight;
-	final int originX, originY;
 	int width, height;
 	double anchorX, anchorY;
 
@@ -34,7 +32,6 @@ public class Spirit implements GameObject{
 	
 	public Spirit(int x, int y) {
 		
-		originX = x; originY = y;
 		anchorX = x; anchorY = y;
 		
 		this.location = new Vector(x, y);
@@ -42,7 +39,6 @@ public class Spirit implements GameObject{
 		this.velocity = new Vector(0, 0);
 		
 		width = 50; height = 50;
-		originWidth = width; originHeight = height;
 	}
 	
 	
@@ -51,7 +47,6 @@ public class Spirit implements GameObject{
 	public void Draw(Graphics2D g) {
 		//Draw the player
 			sprite.draw(g, (int)location.getX() - width / 2, (int)location.getY() - height / 2, this.width, this.height);
-		
 	}
 
 	@Override
@@ -62,7 +57,6 @@ public class Spirit implements GameObject{
 		else{
 			beStaggered();
 		}
-		
 	}
 	
 	@Override
@@ -94,22 +88,7 @@ public class Spirit implements GameObject{
 		this.hp -= damage;
 		System.out.println(damage);
 	}
-	
-// ------------------------Methods for resizing and repositioning relative to the screens size--------------------------//
-	public void resize(int currWidth, int currHeight, int originW, int originH){
-		// resize object with game resolution
-		this.width = (originWidth * currWidth) / originW;
-		this.height = (originHeight * currHeight) / originH;
-	}	
-	public void reposition(int currWidth, int currHeight, int originW, int originH){
-		// reposition game object to maintain distance from the middle of the screen
-		this.location.setX(originX * currWidth / originW);
-		this.location.setY(originY * currHeight / originH);
-		anchorX = this.location.getX();
-		anchorY = this.location.getY();
-	}
-	
-	// ------------------------Getters--------------------------//
+// ------------------------Getters--------------------------//
 	
 	@Override
 	public int getHp() {

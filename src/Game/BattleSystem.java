@@ -9,14 +9,12 @@ import Sprites.SpriteScreen;
 
 public class BattleSystem implements GameCore{
 
-	
 	Player player;
 	ArrayList<GameObject> Enemies;
 	
 	State state = State.Start;
 	boolean paused = false;
 	int width, height;
-	int originHeight, originWidth;
 	long pauseStart;
 	long pauseFinish;
 	static long startTime;
@@ -26,8 +24,6 @@ public class BattleSystem implements GameCore{
 		// for resize method
 		this.width = width;
 		this.height = height;
-		this.originWidth = width;
-		this.originHeight = height;
 		
 		Enemies = new ArrayList<GameObject>();
 		Enemies.add(new Spirit(170, 220));
@@ -47,10 +43,6 @@ public class BattleSystem implements GameCore{
 		// all the different input values
 		a = KeyBoard.key[65]; w = KeyBoard.key[87]; d = KeyBoard.key[68]; s = KeyBoard.key[83];
 		up = KeyBoard.key[38]; down = KeyBoard.key[40]; left = KeyBoard.key[37]; right = KeyBoard.key[39];
-		pauseKey = KeyBoard.key[80];
-		
-		// pause if the key is pressed and save the amount of time paused!
-		pause(pauseKey);
 		
 		// Take input normally when not paused
 		if (!paused){
@@ -86,41 +78,6 @@ public class BattleSystem implements GameCore{
 			}			
 		}
 	}
-	
-	boolean pauseKeyDown = false;
-	@Override
-	public void pause(boolean keyIsPressed) {
-		if(keyIsPressed && !pauseKeyDown)
-		{
-			this.paused = !paused;
-			pauseKeyDown = true;
-			if(paused) pauseStart = System.nanoTime();
-			else pauseFinish = System.nanoTime() - pauseStart;
-		}
-		if(!keyIsPressed){
-			pauseKeyDown = false;
-		}
-	}
-
-//-------------------------- Utility methods --------------------------//
-	@Override
-	public void setSize(int width, int height){
-		this.width = width;
-		this.height = height;
-	}
-	public void resizeAll() {
-		for(int i = 0; i < Enemies.size(); i++){
-			Enemies.get(i).resize(width, height, originWidth, originHeight);
-		}
-		player.resize(width, height, originWidth, originHeight);
-	}
-	public void repositionAll() {
-		for(int i = 0; i < Enemies.size(); i++){
-			Enemies.get(i).reposition(width, height, originWidth, originHeight);
-		}
-		player.reposition(width, height, originWidth, originHeight);
-	}
-	
 
 //-------------------------- Draw every object and the game world --------------------------//
 	int energyBarLen = 100;
@@ -130,12 +87,9 @@ public class BattleSystem implements GameCore{
 	SpriteScreen animatedBackground = new SpriteScreen("StartAnimation.png");
 	@Override
 	public void draw(Graphics2D g) {
-		if(paused){
-			g.setColor(Color.orange);
-			g.drawString("Pause", width - 150, 40);
-			
-		}
+
 		// Draw the objects
+		g.setFont(g.getFont().deriveFont(18));
 		player.Draw(g);
 		for(int i = 0; i < Enemies.size(); i++){
 			Enemies.get(i).Draw(g);

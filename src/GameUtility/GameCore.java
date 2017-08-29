@@ -5,8 +5,4 @@ public interface GameCore {
 	void loop();
 	void takeInput();
 	void draw(Graphics2D g);
-	void setSize(int width, int height);
-	void pause(boolean keyIsPressed);
-	void resizeAll();
-	void repositionAll();
 }
